@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Request, Response } from 'express';
-import sequelize from './config/db';
+import sequelize, { testConnection } from './config/db'
 import syncDatabase from './config/sync';
 import routes from './routes/routes';
 import swaggerUi from 'swagger-ui-express';
@@ -22,17 +22,29 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Function to start the server
+// const startServer = async () => {
+//   try {
+//     console.log('Environment variables loaded successfully.');
+
+//     // Connect to the database
+//     console.log('Attempting to connect to the database...');
+//     await sequelize.authenticate();
+//     console.log('Database connected successfully');
+
+//     // Sync database
+//     await syncDatabase();
+
+//     // Start the server
+//     app.listen(PORT, () => {
+//       console.log(`Server is running on port ${PORT}`);
+//     });
+//   } catch (error) {
+//     console.error('Error starting the server:', error);
+//   }
+// };
 const startServer = async () => {
   try {
-    console.log('Environment variables loaded successfully.');
-
-    // Connect to the database
-    console.log('Attempting to connect to the database...');
-    await sequelize.authenticate();
-    console.log('Database connected successfully');
-
-    // Sync database
-    await syncDatabase();
+    await testConnection(); // Test the database connection
 
     // Start the server
     app.listen(PORT, () => {
@@ -42,7 +54,6 @@ const startServer = async () => {
     console.error('Error starting the server:', error);
   }
 };
-
 // Start the server
 startServer();
 
